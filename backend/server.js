@@ -1,20 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-
 const app = express();
-
 app.use(cors());
 app.use(express.json());
-
 app.use(express.static(__dirname + "/public"));
-
 let logs = [];
 const filePath = __dirname + "/data.json";
 if (fs.existsSync(filePath)) {
   logs = JSON.parse(fs.readFileSync(filePath));
 }
-
 app.post("/submit", (req, res) => {
   const { name, date, count } = req.body;
 
@@ -33,7 +28,6 @@ app.post("/submit", (req, res) => {
   res.json({ message: "Saved successfully" });
 });
 
-
 app.get("/user/:name", (req, res) => {
   const name = req.params.name;
 
@@ -44,11 +38,11 @@ app.get("/user/:name", (req, res) => {
   res.json({ total });
 });
 
-app.use((req, res) => {
+app.get((req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
-// Port
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

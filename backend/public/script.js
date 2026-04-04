@@ -1,6 +1,7 @@
 const today = new Date().toISOString().split("T")[0];
 document.getElementById("date").value = today;
 
+// Submit
 function submitData() {
   let name = document.getElementById("name").value;
   let count = document.getElementById("count").value;
@@ -23,12 +24,15 @@ function submitData() {
   })
   .then(res => res.json())
   .then(() => {
+
     loadIndividual(name);
 
     document.getElementById("name").value = "";
     document.getElementById("count").value = "";
   });
 }
+
+// Load individual count
 function loadIndividual(name) {
   fetch("/user/" + name)
     .then(res => res.json())

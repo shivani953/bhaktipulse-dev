@@ -5,13 +5,16 @@
 body {
   margin: 0;
   font-family: Arial;
-  background: linear-gradient(to right, #fdf6f0, #fbe3d8);
+  background-image: url("BG.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .title {
   text-align: center;
   color: red;
-  font-size: 28px;
+  font-size: 32px;
   margin: 20px;
 }
 
@@ -36,7 +39,7 @@ body {
 }
 
 .right {
-  flex: 0 0 60%;
+  flex: 0 0 70%;
   max-width: 500px;
   width: 100%;
 }
