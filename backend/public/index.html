@@ -2,40 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport"content="width=device-width,initial-scale=1.0">
   <title>BhaktiPulse</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1 class="title">
-    శ్రీ మణి ద్వీప వర్ణన శత కోటి పారాయణ మహా యజ్ఞం
-  </h1>
+<div class="container">
 
-  <div class="container">
-
-    <div class="left">
-      <img src="FB.png" alt="Goddess">
-    </div>
-
-    <div class="right">
-
-      <div class="card">
-        <h2>Every Darshan Counts 🙏</h2>
-
-        <input type="text" id="name" placeholder="Name">
-        <input type="text" id="date" disabled>
-        <input type="number" id="count" placeholder="Count">
-
-        <button onclick="submitData()">Submit</button>
-      </div>
-
-      <div class="card">
-        <h3>Individual Count: <span id="individual">0</span></h3>
-      </div>
-
-    </div>
+  <div class="left">
+    <img src="FB.png" alt="Goddess">
   </div>
 
-  <script src="script.js"></script>
+  <div class="right">
+
+    <div class="title">
+      <h1>శ్రీ మణి ద్వీప వర్ణన శత కోటి పారాయణ మహా యజ్ఞం</h1>
+    </div>
+
+    <div class="card">
+      <input type="text" id="name" placeholder="Name">
+      <input type="text" id="date" disabled>
+      <input type="number" id="count" placeholder="Count">
+      <button onclick="submitData()">Submit</button>
+    </div>
+
+    <div class="card">
+      <h3>Individual Count: <span id="individual">0</span></h3>
+      <h3>Total Count: <span id="total">0</span></h3>
+      <h3>Today Count: <span id="today">0</span></h3>
+      <h3>Registered Users: <span id="users">0</span></h3>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
