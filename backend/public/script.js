@@ -1,20 +1,23 @@
-const API = "http://localhost:5000";
+
+const API = window.location.origin;
+
+// Set date
 document.getElementById("date").value =
   new Date().toISOString().split("T")[0];
 
-// Submit Data
+// Submit
 async function submitData() {
   const name = document.getElementById("name").value.trim();
   const date = document.getElementById("date").value;
-  const count = document.getElementById("count").value;
+  const count = parseInt(document.getElementById("count").value);
 
   if (!name || !count || count <= 0) {
-    alert("Please enter valid details");
+    alert("Enter valid details");
     return;
   }
 
   try {
-    const res = await fetch(API + "/submit", {
+    await fetch(API + "/submit", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -22,40 +25,39 @@ async function submitData() {
       body: JSON.stringify({ name, date, count })
     });
 
-    const data = await res.json();
+
     document.getElementById("count").value = "";
+
     loadData(name);
 
-  } catch (error) {
-    alert("❌ Server Error");
-    console.error(error);
+  } catch (err) {
+    alert("❌ Server error");
   }
 }
 
+// Load
 async function loadData(name = "") {
   try {
+
     if (name) {
-      const res1 = await fetch(API + "/user/" + name);
-      const data1 = await res1.json();
-      document.getElementById("individual").innerText = data1.total;
+      const r1 = await fetch(API + "/user/" + name);
+      const d1 = await r1.json();
+      document.getElementById("individual").innerText = d1.total || 0;
     }
 
-    const res2 = await fetch(API + "/total");
-    const data2 = await res2.json();
-    document.getElementById("total").innerText = data2.total;
-    const res3 = await fetch(API + "/today");
-    const data3 = await res3.json();
-    document.getElementById("today").innerText = data3.total;
-    const res4 = await fetch(API + "/users");
-    const data4 = await res4.json();
-    document.getElementById("users").innerText = data4.count;
+    const r2 = await fetch(API + "/total");
+    document.getElementById("total").innerText = (await r2.json()).total || 0;
 
-  } catch (error) {
-    console.error("Error loading data:", error);
+    const r3 = await fetch(API + "/today");
+    document.getElementById("today").innerText = (await r3.json()).total || 0;
+
+    const r4 = await fetch(API + "/users");
+    document.getElementById("users").innerText = (await r4.json()).count || 0;
+
+  } catch (e) {
+    console.log(e);
   }
 }
 
 loadData();
-setInterval(() => {
-  loadData();
-}, 5000);
+setInterval(loadData, 5000);

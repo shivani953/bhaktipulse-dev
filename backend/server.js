@@ -1,71 +1,65 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
+const path = require("path");
 
 const app = express();
+
 app.use(cors());
-app.use(express.json({ limit: "10kb" }));
-app.use(express.static(__dirname + "/public"));
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "public")));
 
 let logs = [];
-const filePath = __dirname + "/data.json";
+const filePath = path.join(__dirname, "data.json");
 
 if (fs.existsSync(filePath)) {
   logs = JSON.parse(fs.readFileSync(filePath));
 }
 
+// Submit
 app.post("/submit", (req, res) => {
   const { name, date, count } = req.body;
+
   if (!name || !count || count <= 0) {
-    return res.status(400).json({ error: "Invalid input" });
+    return res.status(400).json({ error: "Invalid" });
   }
 
-  const entry = {
-    name: name.trim(),
-    date,
-    count: Number(count)
-  };
-
-  logs.push(entry);
+  logs.push({ name, date, count: Number(count) });
 
   fs.writeFileSync(filePath, JSON.stringify(logs, null, 2));
 
-  res.json({ message: "Saved successfully" });
+  res.json({ message: "Saved" });
 });
 
+// Routes
 app.get("/user/:name", (req, res) => {
-  const name = req.params.name;
-
   const total = logs
-    .filter(log => log.name.toLowerCase() === name.toLowerCase())
-    .reduce((sum, log) => sum + log.count, 0);
+    .filter(l => l.name.toLowerCase() === req.params.name.toLowerCase())
+    .reduce((s, l) => s + l.count, 0);
 
   res.json({ total });
 });
+
 app.get("/total", (req, res) => {
-  const total = logs.reduce((sum, log) => sum + log.count, 0);
-  res.json({ total });
+  res.json({ total: logs.reduce((s, l) => s + l.count, 0) });
 });
 
 app.get("/today", (req, res) => {
   const today = new Date().toISOString().split("T")[0];
 
   const total = logs
-    .filter(log => log.date === today)
-    .reduce((sum, log) => sum + log.count, 0);
+    .filter(l => l.date === today)
+    .reduce((s, l) => s + l.count, 0);
 
   res.json({ total });
 });
 
 app.get("/users", (req, res) => {
-  const uniqueUsers = [...new Set(logs.map(log => log.name.toLowerCase()))];
-  res.json({ count: uniqueUsers.length });
+  const users = [...new Set(logs.map(l => l.name.toLowerCase()))];
+  res.json({ count: users.length });
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
-});
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log("🚀 Server running on http://localhost:" + PORT);
-});
+// Start
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("Server running on " + PORT));
